@@ -46,6 +46,6 @@ while True:
 
 
     elif answer==5:
-        
+        trier_produit()
         input ("")
         os.system("cls")

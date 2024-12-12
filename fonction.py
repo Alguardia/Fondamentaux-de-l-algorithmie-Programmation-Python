@@ -1,5 +1,4 @@
-import os, time
-
+import os
 
 def lire_liste():
     with open('produit.txt', 'r',encoding='utf-8') as fichier:
@@ -10,14 +9,21 @@ def lire_liste():
 
 
 def ajouter_produit():
-    inputuser=input("Ajouter un produit :")
+    print("Ajouter un produit :")
+    inputusernom=input("Nom du produit :")
+    inputuserprix=input("Prix du produit :")
+    inputuserquantite=input("Quantité du produit :")
+
     with open('produit.txt', 'a',encoding='utf-8') as fichier:
-        if not inputuser:
+        if not  inputusernom or not inputuserprix or not  inputuserquantite:
             print("Erreur, le champ est vide")
-            inputuser=input("Ajouter un produit :")
+            inputusernom=input("Nom du produit :")
+            inputuserprix=input("Prix du produit :")
+            inputuserquantite=input("Quantité du produit :")
+            
         else:
             fichier.write('\n')
-            fichier.write(inputuser)
+            fichier.write(inputusernom +','+ inputuserprix + ',' +  inputuserquantite)
 
 
 def supprimer_produit():
@@ -53,8 +59,10 @@ def rechercher_produit():
     print("2) Recherhce dichotomique")
     answer = int(input("Choisir une option : "))
 
-    if answer==1:
 
+
+    if answer==1:
+        print("1) Recherche séquentielle : ")
         input_recherche=str(input("produit a rechercher : "))
         with open('produit.txt', 'r',encoding='utf-8') as fichier:
             f = fichier.readlines()
@@ -65,7 +73,11 @@ def rechercher_produit():
                     print('ID :',i,', NOM :',a[0],', PRIX :',a[1],', QUANTITE :',a[2])
 
 
+
+
+
     elif answer == 2:
+        print("2) Recherhce dichotomique : ")
         liste = []
         input_recherche = str(input("Produit à rechercher : "))
         
@@ -97,4 +109,108 @@ def rechercher_produit():
         else:
             print(f"Le produit '{input_recherche}' n'a pas été trouvé.")
 
+def trier_produit():
+    i=0
+    print("1) Tri par sélection par nom")
+    print("2) Tri à bulles par prix ")
+    print("3) Tri rapide par quantité")
+    answer = int(input("Choisir une option : "))
 
+
+
+
+
+
+    if answer == 1:
+        print("1) Tri par sélection par nom : ")
+        liste = []
+        with open('produit.txt', 'r', encoding='utf-8') as fichier:
+            f = fichier.readlines()
+            
+            for ligne in f:
+                a = ligne.split(",")
+                produit_nom = a[0].strip().lower()
+                produit_prix = a[1].strip()
+                produit_quantite = a[2].strip()
+                liste.append((produit_nom, produit_prix, produit_quantite))
+
+        n = len(liste)
+        for i in range(0, n-1):
+            min_indice = i
+            min = liste[i]
+            for j in range(i+1, n):
+                if liste[j][0] < min[0]:
+                    min_indice = j
+                    min = liste[j]
+            
+            liste[i], liste[min_indice] = liste[min_indice], liste[i]
+
+        for a in liste :
+            print('NOM :',a[0],', PRIX :',a[1],', QUANTITE :',a[2])
+
+
+	
+
+         
+
+
+    elif answer == 2:
+        print("2) Tri à bulles par prix : ")
+        liste = []
+        with open('produit.txt', 'r', encoding='utf-8') as fichier:
+            f = fichier.readlines()
+            
+            for ligne in f:
+                a = ligne.split(",")
+                produit_nom = a[0].strip().lower()
+                produit_prix = float(a[1].strip())
+                produit_quantite = a[2].strip()
+                liste.append((produit_nom, produit_prix, produit_quantite))
+
+            n = len(liste)
+            permut = True
+            while permut == True :
+                permut = False
+                for i in range (0, n-1):
+                    if liste[i][1] > liste[i+1][1]:
+                        liste[i], liste[i+1] =  liste[i+1], liste[i]
+                        permut = True
+                n=n-1
+            for a in liste :
+                print('NOM :',a[0],', PRIX :',a[1],', QUANTITE :',a[2])
+
+
+
+
+
+
+
+
+    elif answer == 3:
+        print("3) Tri rapide par quantité :")
+        liste = []
+        with open('produit.txt', 'r', encoding='utf-8') as fichier:
+            f = fichier.readlines()
+                
+            for ligne in f:
+                a = ligne.split(",")
+                produit_nom = a[0].strip().lower()
+                produit_prix = a[1].strip()
+                produit_quantite = a[2].strip()
+                liste.append((produit_nom, float(produit_prix), int(produit_quantite))) 
+
+            n = len(liste)
+
+        def tri_rapide(liste):
+            if len(liste) <= 1:
+                return liste
+            else:
+                pivot = liste[0][2]
+                gauche = [x for x in liste[1:] if x[2] < pivot]
+                droite = [x for x in liste[1:] if x[2] >= pivot]
+                return tri_rapide(gauche) + [liste[0]] + tri_rapide(droite)
+
+        liste_triee = tri_rapide(liste)
+
+        for a in liste_triee:
+            print('NOM :',a[0],', PRIX :',a[1],', QUANTITE :',a[2])
