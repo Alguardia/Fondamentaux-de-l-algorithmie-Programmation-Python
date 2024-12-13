@@ -6,7 +6,6 @@ Pain, 1.00, 15
 Tomates, 2.00, 12
 Fromage, 5.50, 5
 Jus d'orange, 2.00, 15
-Poulet, 6.00, 7
 Pâtes, 1.80, 10
 poire,1.02,15
 pain,1.00,50

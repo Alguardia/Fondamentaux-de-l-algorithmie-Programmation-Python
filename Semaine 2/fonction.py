@@ -46,8 +46,10 @@ def supprimer_produit():
         with open('produit.txt', 'w', encoding='utf-8') as fichier:
             fichier.writelines(nouvelles_lignes)
         print("Le produit a été supprimé avec succès.")
+        input("")
     else:
         print("Aucun produit trouvé avec ce nom.")
+        input("")
 
 
 

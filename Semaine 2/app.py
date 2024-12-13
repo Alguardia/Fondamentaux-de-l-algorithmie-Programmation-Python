@@ -1,6 +1,7 @@
 import os, time
 from fonction import *
 from connexion import *
+import pwnedpasswords
 
 def show_menu():
     global answer
@@ -24,6 +25,7 @@ while True:
 
     print("1) Login")
     print("2) Register")
+    print("3) Delete")
     answer=int(input("Choisir une option : "))
 
     if answer==1:
@@ -63,4 +65,7 @@ while True:
 
     if answer==2:
         register()
+
+    if answer==3:
+        supprimer_user()
         
