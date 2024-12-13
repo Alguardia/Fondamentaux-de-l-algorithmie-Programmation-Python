@@ -20,6 +20,7 @@ def show_menu():
     return answer
 
 while True:
+    os.system("cls")    
     show_menu()
 
     if answer==1:
@@ -49,3 +50,4 @@ while True:
         trier_produit()
         input ("")
         os.system("cls")
+
