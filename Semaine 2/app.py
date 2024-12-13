@@ -1,8 +1,8 @@
-import os, time
+import os
 from fonction import *
 from connexion import *
 import pwnedpasswords
-
+password=""
 def show_menu():
     global answer
     print("|############################################################|")
@@ -29,10 +29,15 @@ while True:
     answer=int(input("Choisir une option : "))
 
     if answer==1:
-        if login():
+        username = input("Entrez votre nom d'utilisateur : ")
+        password = input("Entrez votre mot de passe : ")
+        if login(username,password):
 
-            os.system("cls")    
+            os.system("cls")
+            
+            print("Votre mot de passe a été compromis !\nNombre de fois compromis : ", pwnedpasswords.check(password) )
             show_menu()
+            
 
             if answer==1:
                 lire_liste()

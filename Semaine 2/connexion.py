@@ -1,13 +1,20 @@
-import pandas as pd
-
+import os
+import csv
 
 def register():
     username=input("mettre votre nom :")
-    passwd=input("mettre votre mdp :")
+    password=input("mettre votre mdp :")
+    nom_fichier = f"{username}.csv" 
+    chemin_fichier = os.path.join('liste_produit', nom_fichier)
 
     with open('user.csv', 'a', encoding='utf-8') as fichier: 
-        fichier.write(f"\n{username},{passwd}")
+        fichier.write(f"\n{username},{password}")
         print(f"Utilisateur {username} enregistré avec succès !")
+
+    with open(chemin_fichier, 'w', newline='', encoding='utf-8') as fichier_csv: 
+        writer = csv.writer(fichier_csv) 
+        writer.writerow(['nom', 'prix', 'quantite']) 
+       
 
     input("")
 
@@ -23,14 +30,12 @@ def verifier_utilisateur(username, password):
     return False
 
 
-def login():
-
-    username = input("Entrez votre nom d'utilisateur : ")
-    password = input("Entrez votre mot de passe : ")
-
+def login(username,password):
+    
     if verifier_utilisateur(username, password):
         print("Connexion réussie !")
         return True
+        
         
     else:
         print("Nom d'utilisateur ou mot de passe incorrect.")
