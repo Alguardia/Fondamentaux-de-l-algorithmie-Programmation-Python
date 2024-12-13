@@ -8,9 +8,6 @@ Fromage, 5.50, 5
 Jus d'orange, 2.00, 15
 Poulet, 6.00, 7
 Pâtes, 1.80, 10
-pq, 10,105
-test,1,20
-pq, 10.2,180
 poire,1.02,15
 pain,1.00,50
 toto,12.3,52

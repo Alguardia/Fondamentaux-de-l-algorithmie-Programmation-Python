@@ -91,21 +91,21 @@ def rechercher_produit():
                 produit_quantite = a[2].strip()
                 liste.append((produit_nom, produit_prix, produit_quantite))
         liste.sort()
-        r = -1
-        g = 0
-        d = len(liste) - 1
-        while g <= d and r == -1:
-            c = (g + d) // 2
-            if liste[c][0] < input_recherche:
-                g = c + 1
-            elif liste[c][0] > input_recherche:
-                d = c - 1
+        indice = -1
+        min = 0
+        max = len(liste) - 1
+        while min <= max and indice == -1:
+            moy = (min + max) // 2
+            if liste[moy][0] < input_recherche:
+                min = moy + 1
+            elif liste[moy][0] > input_recherche:
+                max = moy - 1
             else:
-                r = c
+                indice = moy
 
 
-        if r != -1:
-            print('ID :',r+1,', NOM :',input_recherche,', PRIX :',liste[r][1],', QUANTITE :',liste[r][2])
+        if indice != -1:
+            print('ID :',indice+1,', NOM :',input_recherche,', PRIX :',liste[indice][1],', QUANTITE :',liste[indice][2])
         else:
             print(f"Le produit '{input_recherche}' n'a pas été trouvé.")
 
