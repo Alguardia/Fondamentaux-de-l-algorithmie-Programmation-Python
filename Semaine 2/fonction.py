@@ -1,11 +1,17 @@
 import os
+from tabulate import tabulate
 
 def lire_liste():
-    with open('produit.txt', 'r',encoding='utf-8') as fichier:
-            f = fichier.readlines()
-            for ligne in f:
-                a = ligne.split(",")
-                print('NOM :',a[0],', PRIX :',a[1],', QUANTITE :',a[2])
+    with open('produit.txt', 'r', encoding='utf-8') as fichier:
+        f = fichier.readlines()
+
+    produits = []
+    for ligne in f:
+        a = ligne.strip().split(",")  
+        produits.append(a)
+
+    headers = ["NOM", "PRIX", "QUANTITE"]
+    print(tabulate(produits, headers=headers, tablefmt="grid"))
 
 
 def ajouter_produit():
@@ -40,16 +46,19 @@ def supprimer_produit():
             produit_supprime = True 
             print(f"Produit supprimé : {a[0]} , PRIX : {a[1]} , QUANTITE : {a[2]}")
         else:
-            nouvelles_lignes.append(ligne)
+            nouvelles_lignes.append(ligne.strip())
 
     if produit_supprime:
         with open('produit.txt', 'w', encoding='utf-8') as fichier:
-            fichier.writelines(nouvelles_lignes)
+            for i, ligne in enumerate(nouvelles_lignes):
+                if i < len(nouvelles_lignes) - 1:
+                    fichier.write(ligne + "\n")
+                else:
+                    fichier.write(ligne)
+            
         print("Le produit a été supprimé avec succès.")
-        input("")
     else:
         print("Aucun produit trouvé avec ce nom.")
-        input("")
 
 
 
@@ -64,6 +73,8 @@ def rechercher_produit():
 
 
     if answer==1:
+        verif=False
+        os.system("cls")
         print("1) Recherche séquentielle : ")
         input_recherche=str(input("produit a rechercher : "))
         with open('produit.txt', 'r',encoding='utf-8') as fichier:
@@ -73,12 +84,15 @@ def rechercher_produit():
                 a = ligne.split(",")
                 if input_recherche.lower()==a[0].lower():
                     print('ID :',i,', NOM :',a[0],', PRIX :',a[1],', QUANTITE :',a[2])
-
+                    verif=True
+        if not verif:
+            print(f"Le produit '{input_recherche}' n'a pas été trouvé.")
 
 
 
 
     elif answer == 2:
+        os.system("cls")
         print("2) Recherhce dichotomique : ")
         liste = []
         input_recherche = str(input("Produit à rechercher : "))
@@ -111,6 +125,11 @@ def rechercher_produit():
         else:
             print(f"Le produit '{input_recherche}' n'a pas été trouvé.")
 
+
+
+
+
+
 def trier_produit():
     i=0
     print("1) Tri par sélection par nom")
@@ -118,14 +137,12 @@ def trier_produit():
     print("3) Tri rapide par quantité")
     answer = int(input("Choisir une option : "))
 
-
-
-
-
-
     if answer == 1:
+        os.system("cls")
         print("1) Tri par sélection par nom : ")
         liste = []
+        
+
         with open('produit.txt', 'r', encoding='utf-8') as fichier:
             f = fichier.readlines()
             
@@ -135,6 +152,7 @@ def trier_produit():
                 produit_prix = a[1].strip()
                 produit_quantite = a[2].strip()
                 liste.append((produit_nom, produit_prix, produit_quantite))
+
 
         n = len(liste)
         for i in range(0, n-1):
@@ -147,21 +165,24 @@ def trier_produit():
             
             liste[i], liste[min_indice] = liste[min_indice], liste[i]
 
-        for a in liste :
-            print('NOM :',a[0],', PRIX :',a[1],', QUANTITE :',a[2])
 
+        headers = ["NOM", "PRIX", "QUANTITE"]
+        print(tabulate(liste, headers=headers, tablefmt="grid"))
 
 	
 
          
 
 
-    elif answer == 2:
+    if answer == 2:
+        os.system("cls")
         print("2) Tri à bulles par prix : ")
+        
         liste = []
+        
         with open('produit.txt', 'r', encoding='utf-8') as fichier:
             f = fichier.readlines()
-            
+
             for ligne in f:
                 a = ligne.split(",")
                 produit_nom = a[0].strip().lower()
@@ -169,39 +190,39 @@ def trier_produit():
                 produit_quantite = a[2].strip()
                 liste.append((produit_nom, produit_prix, produit_quantite))
 
-            n = len(liste)
-            permut = True
-            while permut == True :
-                permut = False
-                for i in range (0, n-1):
-                    if liste[i][1] > liste[i+1][1]:
-                        liste[i], liste[i+1] =  liste[i+1], liste[i]
-                        permut = True
-                n=n-1
-            for a in liste :
-                print('NOM :',a[0],', PRIX :',a[1],', QUANTITE :',a[2])
+        n = len(liste)
+        permut = True
+        while permut:
+            permut = False
+            for i in range(0, n-1):
+                if liste[i][1] > liste[i+1][1]:
+                    liste[i], liste[i+1] = liste[i+1], liste[i]
+                    permut = True
+            n = n - 1
+
+        headers = ["NOM", "PRIX", "QUANTITE"]
+        print(tabulate(liste, headers=headers, tablefmt="grid"))
 
 
 
 
 
-
-
-
-    elif answer == 3:
+    if answer == 3:
+        os.system("cls")
         print("3) Tri rapide par quantité :")
         liste = []
+        
         with open('produit.txt', 'r', encoding='utf-8') as fichier:
             f = fichier.readlines()
-                
+            
             for ligne in f:
                 a = ligne.split(",")
                 produit_nom = a[0].strip().lower()
                 produit_prix = a[1].strip()
                 produit_quantite = a[2].strip()
-                liste.append((produit_nom, float(produit_prix), int(produit_quantite))) 
+                liste.append((produit_nom, float(produit_prix), int(produit_quantite)))
 
-            n = len(liste)
+        n = len(liste)
 
         def tri_rapide(liste):
             if len(liste) <= 1:
@@ -214,5 +235,5 @@ def trier_produit():
 
         liste_triee = tri_rapide(liste)
 
-        for a in liste_triee:
-            print('NOM :',a[0],', PRIX :',a[1],', QUANTITE :',a[2])
+        headers = ["NOM", "PRIX", "QUANTITE"]
+        print(tabulate(liste_triee, headers=headers, tablefmt="grid"))
