@@ -1,3 +1,4 @@
+nom,prix,quantite
 Pommes, 1.20, 10
 Bananes, 1.50, 8
 Lait, 0.90, 20
@@ -11,4 +12,3 @@ Pâtes, 1.80, 10
 poire,1.02,15
 pain,1.00,50
 toto,12.3,52
-test,15,15

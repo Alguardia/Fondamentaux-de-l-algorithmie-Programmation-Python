@@ -5,7 +5,7 @@ def register():
     username=input("mettre votre nom :")
     password=input("mettre votre mdp :")
     nom_fichier = f"{username}.csv" 
-    chemin_fichier = os.path.join('liste_produit', nom_fichier)
+    chemin_fichier = os.path.join('data', nom_fichier)
 
     with open('user.csv', 'a', encoding='utf-8') as fichier: 
         fichier.write(f"\n{username},{password}")

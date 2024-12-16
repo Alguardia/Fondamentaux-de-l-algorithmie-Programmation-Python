@@ -1,6 +1,6 @@
 import os
-from fonction import *
-from connexion import *
+from modules.fonction import *
+from modules.connexion import *
 import pwnedpasswords
 
 password = ""
@@ -36,7 +36,6 @@ while True:
             password = input("Entrez votre mot de passe : ")
             if login(username, password):
                 os.system("cls")
-                print("Votre mot de passe a été compromis !\nNombre de fois compromis : ", pwnedpasswords.check(password))
                 is_logged_in = True
             else:
                 print("Échec de la connexion. Veuillez réessayer.")
@@ -49,6 +48,7 @@ while True:
             supprimer_user()
 
     else:
+        print("Votre mot de passe a été compromis !\nNombre de fois compromis : ", pwnedpasswords.check(password))
         answer = show_menu()
 
         
