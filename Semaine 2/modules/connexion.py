@@ -20,7 +20,7 @@ def register():
 
 
 def verifier_utilisateur(username, password):
-    with open('user.csv', 'r', encoding='utf-8') as fichier:
+    with open('data/user.csv', 'r', encoding='utf-8') as fichier:
         utilisateurs = fichier.readlines()
         
         for utilisateur in utilisateurs:
@@ -34,6 +34,8 @@ def login(username,password):
     
     if verifier_utilisateur(username, password):
         print("Connexion réussie !")
+        nom_fichier = f"{username}.csv" 
+        chemin_fichier = os.path.join('data', nom_fichier)
         return True
         
         
@@ -45,34 +47,34 @@ def login(username,password):
 
 def supprimer_user():
     global mot_de_passe
-    username = input("Entrez votre nom d'utilisateur : ").strip()  # Supprimer les espaces autour de l'entrée
-    password = input("Entrez votre mot de passe : ").strip()  # Supprimer les espaces autour de l'entrée
+    username = input("Entrez votre nom d'utilisateur : ").strip()
+    password = input("Entrez votre mot de passe : ").strip()
     nouvelles_lignes = []
     utilisateur_supprime = False
 
-    with open('user.csv', 'r', encoding='utf-8') as fichier:
+    with open('data/user.csv', 'r', encoding='utf-8') as fichier:
         utilisateurs = fichier.readlines()
 
         for utilisateur in utilisateurs:
-            # Assurez-vous que chaque ligne est bien formatée
+            
             nom, mot_de_passe = utilisateur.strip().split(',')
-            nom = nom.strip()  # Supprimer les espaces autour du nom d'utilisateur
-            mot_de_passe = mot_de_passe.strip()  # Supprimer les espaces autour du mot de passe
+            nom = nom.strip()  
+            mot_de_passe = mot_de_passe.strip()  
            
 
             # Comparer sans espaces
             if nom == username and mot_de_passe == password:
                 utilisateur_supprime = True 
                 print(f"Utilisateur supprimé : {nom}")
-                # Ne pas ajouter cet utilisateur à nouvelles_lignes
+               
             else:
-                nouvelles_lignes.append(utilisateur.strip())  # Ajouter la ligne sans espaces
+                nouvelles_lignes.append(utilisateur.strip())  
 
     if utilisateur_supprime:
-        with open('user.csv', 'w', encoding='utf-8') as fichier:
-            fichier.writelines(nouvelles_lignes)  # Écrire uniquement les utilisateurs restants
+        with open('data/user.csv', 'w', encoding='utf-8') as fichier:
+            fichier.writelines(nouvelles_lignes) 
         
-        # Supprimer le fichier CSV associé à l'utilisateur
+        
         nom_fichier = f"{username}.csv"
         chemin_fichier = os.path.join('liste_produit', nom_fichier)
         if os.path.exists(chemin_fichier):
