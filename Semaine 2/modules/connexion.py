@@ -7,13 +7,13 @@ def register():
     nom_fichier = f"{username}.csv" 
     chemin_fichier = os.path.join('data', nom_fichier)
 
-    with open('user.csv', 'a', encoding='utf-8') as fichier: 
+    with open('data/user.csv', 'a', encoding='utf-8') as fichier: 
         fichier.write(f"\n{username},{password}")
         print(f"Utilisateur {username} enregistré avec succès !")
 
     with open(chemin_fichier, 'w', newline='', encoding='utf-8') as fichier_csv: 
         writer = csv.writer(fichier_csv) 
-        writer.writerow(['nom', 'prix', 'quantite']) 
+        writer.writerow(['NOM', 'PRIX', 'QUANTITE'])
        
 
     input("")
@@ -31,11 +31,8 @@ def verifier_utilisateur(username, password):
 
 
 def login(username,password):
-    
     if verifier_utilisateur(username, password):
         print("Connexion réussie !")
-        nom_fichier = f"{username}.csv" 
-        chemin_fichier = os.path.join('data', nom_fichier)
         return True
         
         
@@ -72,7 +69,11 @@ def supprimer_user():
 
     if utilisateur_supprime:
         with open('data/user.csv', 'w', encoding='utf-8') as fichier:
-            fichier.writelines(nouvelles_lignes) 
+            for i, utilisateur in enumerate(nouvelles_lignes):
+                if i < len(nouvelles_lignes) - 1:
+                    fichier.write(utilisateur + "\n")
+                else:
+                    fichier.write(utilisateur)
         
         
         nom_fichier = f"{username}.csv"

@@ -1,26 +1,29 @@
 import os
 from tabulate import tabulate
+import csv
 
-def lire_liste():
-    with open('produit.txt', 'r', encoding='utf-8') as fichier:
-        f = fichier.readlines()
+def lire_liste(chemin_fichier):
+    produit=[]
+    with open(chemin_fichier, 'r', encoding='utf-8') as fichier:
+        data = csv.reader(fichier)
+   
+        for liste in data:
+            produit.append(liste)
+            print(liste)
+    
 
-    produits = []
-    for ligne in f:
-        a = ligne.strip().split(",")  
-        produits.append(a)
+        
 
-    headers = ["NOM", "PRIX", "QUANTITE"]
-    print(tabulate(produits, headers=headers, tablefmt="grid"))
+    print(tabulate(produit, tablefmt="grid"))
 
 
-def ajouter_produit():
+def ajouter_produit(chemin_fichier):
     print("Ajouter un produit :")
     inputusernom=input("Nom du produit :")
     inputuserprix=input("Prix du produit :")
     inputuserquantite=input("Quantité du produit :")
 
-    with open('produit.txt', 'a',encoding='utf-8') as fichier:
+    with open(chemin_fichier, 'a',encoding='utf-8') as fichier:
         if not  inputusernom or not inputuserprix or not  inputuserquantite:
             print("Erreur, le champ est vide")
             inputusernom=input("Nom du produit :")
@@ -32,9 +35,9 @@ def ajouter_produit():
             fichier.write(inputusernom +','+ inputuserprix + ',' +  inputuserquantite)
 
 
-def supprimer_produit():
+def supprimer_produit(chemin_fichier):
     input_recherche = input("Entrez le nom du produit à supprimer : ")
-    with open('produit.txt', 'r', encoding='utf-8') as fichier:
+    with open(chemin_fichier, 'r', encoding='utf-8') as fichier:
         lignes = fichier.readlines()
 
     nouvelles_lignes = []
@@ -49,7 +52,7 @@ def supprimer_produit():
             nouvelles_lignes.append(ligne.strip())
 
     if produit_supprime:
-        with open('produit.txt', 'w', encoding='utf-8') as fichier:
+        with open(chemin_fichier, 'w', encoding='utf-8') as fichier:
             for i, ligne in enumerate(nouvelles_lignes):
                 if i < len(nouvelles_lignes) - 1:
                     fichier.write(ligne + "\n")
@@ -64,7 +67,7 @@ def supprimer_produit():
 
 
 
-def rechercher_produit():
+def rechercher_produit(chemin_fichier):
     i=0
     print("1) Recherche séquentielle")
     print("2) Recherhce dichotomique")
@@ -77,7 +80,7 @@ def rechercher_produit():
         os.system("cls")
         print("1) Recherche séquentielle : ")
         input_recherche=str(input("produit a rechercher : "))
-        with open('produit.txt', 'r',encoding='utf-8') as fichier:
+        with open(chemin_fichier, 'r',encoding='utf-8') as fichier:
             f = fichier.readlines()
             for ligne in f:
                 i=i+1
@@ -97,7 +100,7 @@ def rechercher_produit():
         liste = []
         input_recherche = str(input("Produit à rechercher : "))
         
-        with open('produit.txt', 'r', encoding='utf-8') as fichier:
+        with open(chemin_fichier, 'r', encoding='utf-8') as fichier:
             f = fichier.readlines()
             
             for ligne in f:
@@ -130,7 +133,7 @@ def rechercher_produit():
 
 
 
-def trier_produit():
+def trier_produit(chemin_fichier):
     i=0
     print("1) Tri par sélection par nom")
     print("2) Tri à bulles par prix ")
@@ -143,7 +146,7 @@ def trier_produit():
         liste = []
         
 
-        with open('produit.txt', 'r', encoding='utf-8') as fichier:
+        with open(chemin_fichier, 'r', encoding='utf-8') as fichier:
             f = fichier.readlines()
             
             for ligne in f:
@@ -180,7 +183,7 @@ def trier_produit():
         
         liste = []
         
-        with open('produit.txt', 'r', encoding='utf-8') as fichier:
+        with open(chemin_fichier, 'r', encoding='utf-8') as fichier:
             f = fichier.readlines()
 
             for ligne in f:
@@ -212,7 +215,7 @@ def trier_produit():
         print("3) Tri rapide par quantité :")
         liste = []
         
-        with open('produit.txt', 'r', encoding='utf-8') as fichier:
+        with open(chemin_fichier, 'r', encoding='utf-8') as fichier:
             f = fichier.readlines()
             
             for ligne in f:

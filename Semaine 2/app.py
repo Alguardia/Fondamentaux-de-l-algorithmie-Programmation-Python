@@ -3,8 +3,8 @@ from modules.fonction import *
 from modules.connexion import *
 import pwnedpasswords
 
-password = ""
 is_logged_in = False
+chemin_fichier=""
 
 def show_menu():
     global answer
@@ -35,6 +35,8 @@ while True:
             username = input("Entrez votre nom d'utilisateur : ")
             password = input("Entrez votre mot de passe : ")
             if login(username, password):
+                nom_fichier = f"{username}.csv" 
+                chemin_fichier = os.path.join('data', nom_fichier)
                 os.system("cls")
                 is_logged_in = True
             else:
@@ -42,38 +44,41 @@ while True:
                 input("Appuyez sur une touche pour continuer...")
 
         elif answer == 2:
+
+            
             register()
 
         elif answer == 3:
             supprimer_user()
 
     else:
+        print(chemin_fichier)
         print("Votre mot de passe a été compromis !\nNombre de fois compromis : ", pwnedpasswords.check(password))
         answer = show_menu()
 
         
         if answer == 1:
-            lire_liste()
+            lire_liste(chemin_fichier)
             input("Appuyez sur une touche pour continuer...")
             os.system("cls")
 
         elif answer == 2:
-            ajouter_produit()
+            ajouter_produit(chemin_fichier)
             input("Appuyez sur une touche pour continuer...")
             os.system("cls")    
 
         elif answer == 3:
-            supprimer_produit()
+            supprimer_produit(chemin_fichier)
             input("Appuyez sur une touche pour continuer...")
             os.system("cls")       
 
         elif answer == 4:
-            rechercher_produit()
+            rechercher_produit(chemin_fichier)
             input("Appuyez sur une touche pour continuer...")
             os.system("cls")        
 
         elif answer == 5:
-            trier_produit()
+            trier_produit(chemin_fichier)
             input("Appuyez sur une touche pour continuer...")
             os.system("cls")
 
