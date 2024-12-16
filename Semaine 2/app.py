@@ -26,9 +26,8 @@ while True:
     os.system("cls") 
 
     if not is_logged_in:
-        print("1) Login")
-        print("2) Register")
-        print("3) Delete")
+        print("1) Se connecter")
+        print("2) S'inscrire")
         answer = int(input("Choisir une option : "))
 
         if answer == 1:
@@ -44,15 +43,25 @@ while True:
                 input("Appuyez sur une touche pour continuer...")
 
         elif answer == 2:
+            os.system("cls")
+            print("1) Créer un compte")
+            print("2) Supprimer un compte")
+            print("3) Liste des commercants")
+            answer = int(input("Choisir une option : "))
+            if answer == 1:
+                os.system("cls")
+                register()
+            elif answer == 2:
+                os.system("cls")
+                supprimer_user()
+            elif answer ==3:
+                os.system("cls")
+                liste_commercants()
 
-            
-            register()
 
-        elif answer == 3:
-            supprimer_user()
+        
 
     else:
-        print(chemin_fichier)
         print("Votre mot de passe a été compromis !\nNombre de fois compromis : ", pwnedpasswords.check(password))
         answer = show_menu()
 

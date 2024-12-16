@@ -1,6 +1,7 @@
 import os
 from tabulate import tabulate
 import csv
+import pandas as pd
 
 def lire_liste(chemin_fichier):
     produit=[]
@@ -8,11 +9,7 @@ def lire_liste(chemin_fichier):
         data = csv.reader(fichier)
    
         for liste in data:
-            produit.append(liste)
-            print(liste)
-    
-
-        
+            produit.append(liste)        
 
     print(tabulate(produit, tablefmt="grid"))
 
@@ -143,36 +140,14 @@ def trier_produit(chemin_fichier):
     if answer == 1:
         os.system("cls")
         print("1) Tri par sélection par nom : ")
-        liste = []
-        
-
-        with open(chemin_fichier, 'r', encoding='utf-8') as fichier:
-            f = fichier.readlines()
-            
-            for ligne in f:
-                a = ligne.split(",")
-                produit_nom = a[0].strip().lower()
-                produit_prix = a[1].strip()
-                produit_quantite = a[2].strip()
-                liste.append((produit_nom, produit_prix, produit_quantite))
-
-
-        n = len(liste)
-        for i in range(0, n-1):
-            min_indice = i
-            min = liste[i]
-            for j in range(i+1, n):
-                if liste[j][0] < min[0]:
-                    min_indice = j
-                    min = liste[j]
-            
-            liste[i], liste[min_indice] = liste[min_indice], liste[i]
-
-
-        headers = ["NOM", "PRIX", "QUANTITE"]
-        print(tabulate(liste, headers=headers, tablefmt="grid"))
-
+    
+        df = pd.read_csv(chemin_fichier)
+        df_sorted = df.sort_values(by="NOM")
+        print(df_sorted)
 	
+
+
+
 
          
 
@@ -189,9 +164,9 @@ def trier_produit(chemin_fichier):
             for ligne in f:
                 a = ligne.split(",")
                 produit_nom = a[0].strip().lower()
-                produit_prix = float(a[1].strip())
+                produit_prix = a[1].strip()
                 produit_quantite = a[2].strip()
-                liste.append((produit_nom, produit_prix, produit_quantite))
+                liste.append((produit_nom, float(produit_prix), int(produit_quantite)))
 
         n = len(liste)
         permut = True

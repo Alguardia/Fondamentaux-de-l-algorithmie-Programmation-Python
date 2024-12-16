@@ -32,8 +32,6 @@ def ajouter_produit():
             fichier.write(inputusernom +','+ inputuserprix + ',' +  inputuserquantite)
 
 
-
-
 def supprimer_produit():
     input_recherche = input("Entrez le nom du produit à supprimer : ")
     with open('produit.txt', 'r', encoding='utf-8') as fichier:
