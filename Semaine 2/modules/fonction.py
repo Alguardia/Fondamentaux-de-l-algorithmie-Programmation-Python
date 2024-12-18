@@ -139,7 +139,7 @@ def trier_produit(chemin_fichier):
 
     if answer == 1:
         os.system("cls")
-        print("1) Tri par sélection par nom : ")
+        print("1) Tri par nom : ")
     
         df = pd.read_csv(chemin_fichier)
         df_sorted = df.sort_values(by="NOM")
@@ -154,64 +154,20 @@ def trier_produit(chemin_fichier):
 
     if answer == 2:
         os.system("cls")
-        print("2) Tri à bulles par prix : ")
-        
-        liste = []
-        
-        with open(chemin_fichier, 'r', encoding='utf-8') as fichier:
-            f = fichier.readlines()
+        print("2) Tri par prix : ")
+    
 
-            for ligne in f:
-                a = ligne.split(",")
-                produit_nom = a[0].strip().lower()
-                produit_prix = a[1].strip()
-                produit_quantite = a[2].strip()
-                liste.append((produit_nom, float(produit_prix), int(produit_quantite)))
-
-        n = len(liste)
-        permut = True
-        while permut:
-            permut = False
-            for i in range(0, n-1):
-                if liste[i][1] > liste[i+1][1]:
-                    liste[i], liste[i+1] = liste[i+1], liste[i]
-                    permut = True
-            n = n - 1
-
-        headers = ["NOM", "PRIX", "QUANTITE"]
-        print(tabulate(liste, headers=headers, tablefmt="grid"))
-
-
-
-
+        df = pd.read_csv(chemin_fichier)
+        df_sorted = df.sort_values(by="PRIX")
+        print(df_sorted)
+	
 
     if answer == 3:
         os.system("cls")
-        print("3) Tri rapide par quantité :")
+        print("3) Tri par quantité :")
         liste = []
-        
-        with open(chemin_fichier, 'r', encoding='utf-8') as fichier:
-            f = fichier.readlines()
-            
-            for ligne in f:
-                a = ligne.split(",")
-                produit_nom = a[0].strip().lower()
-                produit_prix = a[1].strip()
-                produit_quantite = a[2].strip()
-                liste.append((produit_nom, float(produit_prix), int(produit_quantite)))
 
-        n = len(liste)
-
-        def tri_rapide(liste):
-            if len(liste) <= 1:
-                return liste
-            else:
-                pivot = liste[0][2]
-                gauche = [x for x in liste[1:] if x[2] < pivot]
-                droite = [x for x in liste[1:] if x[2] >= pivot]
-                return tri_rapide(gauche) + [liste[0]] + tri_rapide(droite)
-
-        liste_triee = tri_rapide(liste)
-
-        headers = ["NOM", "PRIX", "QUANTITE"]
-        print(tabulate(liste_triee, headers=headers, tablefmt="grid"))
+        df = pd.read_csv(chemin_fichier)
+        df_sorted = df.sort_values(by="QUANTITE")
+        print(df_sorted)
+	
