@@ -5,21 +5,34 @@ import pandas as pd
 import hashlib
 
 
-def register():
-    username = input("Mettre votre nom : ")
-    password = input("Mettre votre mot de passe : ").encode("utf-8")
-    nom_fichier = f"{username}.csv"
-    chemin_fichier = os.path.join('data', nom_fichier)
+def generate_salt():
+    salt = os.urandom(16)
+    return salt
     
 
-    user_data = [[username, hashlib.sha256(password).hexdigest()]]
+def register():
+    username = input("Mettre votre nom : ")
+    salt = generate_salt()
+    password = input("Mettre votre mot de passe : ").encode("utf-8") + salt
 
+    nom_fichier = f"{username}.csv"
+    chemin_fichier = os.path.join('data', nom_fichier)
 
+    user_csv_path = 'data/user.csv'
+    if os.path.exists(user_csv_path):
+        df = pd.read_csv(user_csv_path)
 
-    df = pd.read_csv('data/user.csv')
-    df_new = pd.DataFrame(user_data, columns=['username', 'password'])
+        if username in df['username'].values:
+            print("Erreur : Le nom d'utilisateur existe déjà.")
+            input("")
+            return
+    else:
+        df = pd.DataFrame(columns=['username', 'password', 'salt'])
+
+    user_data = [[username, hashlib.sha256(password).hexdigest(), salt.hex()]]
+    df_new = pd.DataFrame(user_data, columns=['username', 'password', 'salt'])
     df_combined = pd.concat([df, df_new], ignore_index=True)
-    df_combined.to_csv('data/user.csv', index=False)
+    df_combined.to_csv(user_csv_path, index=False)
 
     print(f"Utilisateur {username} enregistré avec succès !")
 
@@ -30,26 +43,32 @@ def register():
 
 
 
+
 def verifier_utilisateur(username, password):
-    password=password.encode("utf-8")
-    password_hashed=hashlib.sha256(password).hexdigest()
+
     df = pd.read_csv('data/user.csv')
-    filtered_df = df.loc[(df['username'] == username) & (df['password'] == password_hashed)]
-    if filtered_df.empty: 
-        print("Aucun élément trouvé.") 
+
+    filtered_df = df.loc[df['username'] == username]
+
+    if filtered_df.empty:
         return False
-    else: 
-        print("Éléments trouvés :") 
-        print(filtered_df)
+
+    salt = bytes.fromhex(filtered_df['salt'].values[0])
+    password_combined = password.encode("utf-8") + salt
+    password_hashed = hashlib.sha256(password_combined).hexdigest()
+
+    if password_hashed == filtered_df['password'].values[0]:
         return True
+    else:
+        return False
+
+
 
 def login(username, password):
     if verifier_utilisateur(username, password):
         print("Connexion réussie !")
         return True
     else:
-        print("Nom d'utilisateur ou mot de passe incorrect.")
-        input('')
         return False
 
 
@@ -59,17 +78,32 @@ def supprimer_user():
     username = input("Entrez votre nom d'utilisateur : ").strip()
     password = input("Entrez votre mot de passe : ").strip().encode("utf-8")
 
-
     user_csv_path = 'data/user.csv'
     df = pd.read_csv(user_csv_path)
-    password_hashed=hashlib.sha256(password).hexdigest()
+
+
+    filtered_df = df.loc[df['username'] == username]
+
+    if filtered_df.empty:
+        print("Aucun utilisateur trouvé avec ce nom.")
+        input("Appuyez sur une touche pour continuer...")
+        return
+
+
+    salt = bytes.fromhex(filtered_df['salt'].values[0])
+
+    password_combined = password + salt
+
+
+    password_hashed = hashlib.sha256(password_combined).hexdigest()
+
     filtered_df = df.loc[~((df['username'] == username) & (df['password'] == password_hashed))]
 
-
     if len(filtered_df) < len(df):
-     
+
         filtered_df.to_csv(user_csv_path, index=False)
         print(f"Utilisateur {username} supprimé avec succès.")
+
 
         nom_fichier = f"{username}.csv"
         chemin_fichier = os.path.join('data', nom_fichier)
@@ -80,7 +114,6 @@ def supprimer_user():
         print("Aucun utilisateur trouvé avec ce nom et ce mot de passe.")
 
     input("Appuyez sur une touche pour continuer...")
-
 
 
 def liste_commercants():

@@ -14,7 +14,6 @@ def lire_liste(chemin_fichier):
 
 
 
-
 def ajouter_produit(chemin_fichier):
     print("Ajouter un produit :")
     inputusernom = input("Nom du produit : ")
@@ -26,7 +25,7 @@ def ajouter_produit(chemin_fichier):
         print("Erreur, le champ est vide")
         return
 
-    produit_data = [[inputusernom, inputuserprix, inputuserquantite]]
+    produit_data = [[inputusernom.lower(), inputuserprix, inputuserquantite]]
 
 
 
@@ -48,7 +47,7 @@ def supprimer_produit(chemin_fichier):
 
     df = pd.read_csv(chemin_fichier)
 
-    filtered_df = df.loc[~df['NOM'].str.lower().str.contains(input_recherche.lower())]
+    filtered_df = df.loc[df['NOM'].str.lower().str.contains(input_recherche.lower())]
 
     if len(filtered_df) < len(df):
         filtered_df.to_csv(chemin_fichier, index=False)
@@ -65,7 +64,7 @@ def rechercher_produit(chemin_fichier):
     input_recherche=str(input("produit a rechercher : "))
     df = pd.read_csv(chemin_fichier)
 
-    filtered_df = df.loc[df['NOM'].str.contains(input_recherche)]
+    filtered_df = df.loc[(df['NOM'] == input_recherche.lower())]
 
     if filtered_df.empty: 
         print(f"Le produit '{input_recherche}' n'a pas été trouvé.")
@@ -96,11 +95,6 @@ def trier_produit(chemin_fichier):
 	
 
 
-
-
-         
-
-
     if answer == 2:
         os.system("cls")
         print("2) Tri par prix : ")
@@ -119,4 +113,3 @@ def trier_produit(chemin_fichier):
         df = pd.read_csv(chemin_fichier)
         df_sorted = df.sort_values(by="QUANTITE")
         print(df_sorted)
-	
