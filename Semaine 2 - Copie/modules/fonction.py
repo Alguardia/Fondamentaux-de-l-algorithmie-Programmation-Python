@@ -42,13 +42,12 @@ def ajouter_produit(chemin_fichier):
 
 
 
-
 def supprimer_produit(chemin_fichier):
     input_recherche = input("Entrez le nom du produit à supprimer : ")
 
     df = pd.read_csv(chemin_fichier)
 
-    filtered_df = df[~df['NOM'].str.lower().str.contains(input_recherche.lower())]
+    filtered_df = df.loc[df['NOM'].str.lower().str.contains(input_recherche.lower())]
 
     if len(filtered_df) < len(df):
         filtered_df.to_csv(chemin_fichier, index=False)
@@ -58,12 +57,10 @@ def supprimer_produit(chemin_fichier):
 
 
 
-
-
 def rechercher_produit(chemin_fichier):
 
     os.system("cls")
-    print("1) Recherche : ")
+    print("1) Recherche séquentielle : ")
     input_recherche=str(input("produit a rechercher : "))
     df = pd.read_csv(chemin_fichier)
 
@@ -83,9 +80,9 @@ def rechercher_produit(chemin_fichier):
 
 def trier_produit(chemin_fichier):
     i=0
-    print("1) Tri par nom")
-    print("2) Tri par prix ")
-    print("3) Tri par quantité")
+    print("1) Tri par sélection par nom")
+    print("2) Tri à bulles par prix ")
+    print("3) Tri rapide par quantité")
     answer = int(input("Choisir une option : "))
 
     if answer == 1:

@@ -3,6 +3,7 @@ import csv
 from tabulate import tabulate
 import pandas as pd
 import hashlib
+from menu import *
 
 
 def generate_salt():
@@ -64,14 +65,20 @@ def verifier_utilisateur(username, password):
 
 
 
-def login(username,password):
+
+def login():
+    global is_logged_in 
+    username = input("Mettre votre nom : ")
+    password = input("Mettre votre mot de passe : ")
 
     if verifier_utilisateur(username, password):
+        
         print("Connexion réussie !")
-        return True
+        
+        is_logged()
     else:
+        print("Échec de la connexion.")
         return False
-
 
 
 
@@ -130,13 +137,3 @@ def liste_commercants():
 
     input("Appuyez sur une touche pour continuer...")
 
-
-
-
-def logout():
-    global is_logged_in, username, password
-    is_logged_in = False
-    username = None
-    password = None
-    print("Vous êtes déconnecté.")
-    input("Appuyez sur une touche pour continuer...")
