@@ -1,39 +1,43 @@
 import os
 import csv
 from tabulate import tabulate
+import pandas as pd
+
 
 def register():
-    username=input("mettre votre nom :")
-    password=input("mettre votre mdp :")
-    nom_fichier = f"{username}.csv" 
+    username = input("Mettre votre nom : ")
+    password = input("Mettre votre mot de passe : ")
+    nom_fichier = f"{username}.csv"
     chemin_fichier = os.path.join('data', nom_fichier)
 
-    with open('data/user.csv', 'a', encoding='utf-8') as fichier: 
-        fichier.write(f"\n{username},{password}")
-        print(f"Utilisateur {username} enregistré avec succès !")
+    user_data = [[username, password]]
 
 
-    with open(chemin_fichier, 'w', newline='', encoding='utf-8') as fichier_csv:
-        writer = csv.writer(fichier_csv)
-        writer.writerow(['NOM', 'PRIX', 'QUANTITE'])
 
-    input("")
+    df = pd.read_csv('data/user.csv')
+    df_new = pd.DataFrame(user_data, columns=['username', 'password'])
+    df_combined = pd.concat([df, df_new], ignore_index=True)
+    df_combined.to_csv('data/user.csv', index=False)
 
+    print(f"Utilisateur {username} enregistré avec succès !")
+
+    df_produit = pd.DataFrame(columns=['NOM', 'PRIX', 'QUANTITE'])
+    df_produit.to_csv(chemin_fichier, index=False)
+
+    input("Appuyez sur une touche pour continuer...")
 
 
 
 def verifier_utilisateur(username, password):
-    with open('data/user.csv', 'r', encoding='utf-8') as fichier:
-        reader = csv.reader(fichier)
-        for row in reader:
-            if row[0] == username and row[1] == password:
-                return True
-    return False
-
-
-
-
-
+    df = pd.read_csv('data/user.csv')
+    filtered_df = df.loc[(df['username'] == username) & (df['password'] == password)]
+    if filtered_df.empty: 
+        print("Aucun élément trouvé.") 
+        return False
+    else: 
+        print("Éléments trouvés :") 
+        print(filtered_df)
+        return True
 
 def login(username, password):
     if verifier_utilisateur(username, password):
@@ -48,62 +52,42 @@ def login(username, password):
 
 
 def supprimer_user():
-    global mot_de_passe
     username = input("Entrez votre nom d'utilisateur : ").strip()
     password = input("Entrez votre mot de passe : ").strip()
-    nouvelles_lignes = []
-    utilisateur_supprime = False
 
-    with open('data/user.csv', 'r', encoding='utf-8') as fichier:
-        utilisateurs = fichier.readlines()
 
-        for utilisateur in utilisateurs:
-            
-            nom, mot_de_passe = utilisateur.strip().split(',')
-            nom = nom.strip()  
-            mot_de_passe = mot_de_passe.strip()  
-           
+    user_csv_path = 'data/user.csv'
+    df = pd.read_csv(user_csv_path)
 
-      
-            if nom == username and mot_de_passe == password:
-                utilisateur_supprime = True 
-                print(f"Utilisateur supprimé : {nom}")
-               
-            else:
-                nouvelles_lignes.append(utilisateur.strip())  
+    filtered_df = df.loc[~((df['username'] == username) & (df['password'] == password))]
 
-    if utilisateur_supprime:
-        with open('data/user.csv', 'w', encoding='utf-8') as fichier:
-            for i, utilisateur in enumerate(nouvelles_lignes):
-                if i < len(nouvelles_lignes) - 1:
-                    fichier.write(utilisateur + "\n")
-                else:
-                    fichier.write(utilisateur)
-        
-        
+
+    if len(filtered_df) < len(df):
+     
+        filtered_df.to_csv(user_csv_path, index=False)
+        print(f"Utilisateur {username} supprimé avec succès.")
+
         nom_fichier = f"{username}.csv"
         chemin_fichier = os.path.join('data', nom_fichier)
         if os.path.exists(chemin_fichier):
             os.remove(chemin_fichier)
             print(f"Le fichier CSV '{nom_fichier}' a été supprimé.")
-        
-        print("L'utilisateur a été supprimé avec succès.")
-        input("Appuyez sur une touche pour continuer...")
     else:
-        print("Aucun utilisateur trouvé avec ce nom.")
-        input("Appuyez sur une touche pour continuer...")
+        print("Aucun utilisateur trouvé avec ce nom et ce mot de passe.")
+
+    input("Appuyez sur une touche pour continuer...")
+
 
 
 def liste_commercants():
-    commercants=[]
-    with open('data/user.csv', 'r', encoding='utf-8') as fichier:
-        reader = csv.reader(fichier)
-        next(reader)
-        for row in reader:
-            commercants.append(row[0])
+
+    user_csv_path = 'data/user.csv'
+    df = pd.read_csv(user_csv_path)
 
 
-    print("Liste des commerçants :") 
-    for commercant in commercants: 
+    commercants = df['username'].tolist()
+    print("Liste des commerçants :")
+    for commercant in commercants:
         print(f"- {commercant}")
+
     input("Appuyez sur une touche pour continuer...")

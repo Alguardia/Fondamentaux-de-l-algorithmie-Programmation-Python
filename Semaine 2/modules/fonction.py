@@ -77,19 +77,17 @@ def rechercher_produit(chemin_fichier):
         os.system("cls")
         print("1) Recherche séquentielle : ")
         input_recherche=str(input("produit a rechercher : "))
-        with open(chemin_fichier, 'r',encoding='utf-8') as fichier:
-            f = fichier.readlines()
-            for ligne in f:
-                i=i+1
-                a = ligne.split(",")
-                if input_recherche.lower()==a[0].lower():
-                    print('ID :',i,', NOM :',a[0],', PRIX :',a[1],', QUANTITE :',a[2])
-                    verif=True
-        if not verif:
+        df = pd.read_csv(chemin_fichier)
+        filtered_df = df.loc[df['NOM'].str.contains(input_recherche)]
+        if filtered_df.empty: 
             print(f"Le produit '{input_recherche}' n'a pas été trouvé.")
+            return False
+        else: 
+            print("Éléments trouvés :") 
+            print(filtered_df)
+            return True
 
-
-
+        
 
     elif answer == 2:
         os.system("cls")
