@@ -2,15 +2,17 @@ import os
 import csv
 from tabulate import tabulate
 import pandas as pd
+import hashlib
 
 
 def register():
     username = input("Mettre votre nom : ")
-    password = input("Mettre votre mot de passe : ")
+    password = input("Mettre votre mot de passe : ").encode("utf-8")
     nom_fichier = f"{username}.csv"
     chemin_fichier = os.path.join('data', nom_fichier)
+    
 
-    user_data = [[username, password]]
+    user_data = [[username, hashlib.sha256(password).hexdigest()]]
 
 
 
@@ -29,8 +31,10 @@ def register():
 
 
 def verifier_utilisateur(username, password):
+    password=password.encode("utf-8")
+    password_hashed=hashlib.sha256(password).hexdigest()
     df = pd.read_csv('data/user.csv')
-    filtered_df = df.loc[(df['username'] == username) & (df['password'] == password)]
+    filtered_df = df.loc[(df['username'] == username) & (df['password'] == password_hashed)]
     if filtered_df.empty: 
         print("Aucun élément trouvé.") 
         return False
@@ -53,13 +57,13 @@ def login(username, password):
 
 def supprimer_user():
     username = input("Entrez votre nom d'utilisateur : ").strip()
-    password = input("Entrez votre mot de passe : ").strip()
+    password = input("Entrez votre mot de passe : ").strip().encode("utf-8")
 
 
     user_csv_path = 'data/user.csv'
     df = pd.read_csv(user_csv_path)
-
-    filtered_df = df.loc[~((df['username'] == username) & (df['password'] == password))]
+    password_hashed=hashlib.sha256(password).hexdigest()
+    filtered_df = df.loc[~((df['username'] == username) & (df['password'] == password_hashed))]
 
 
     if len(filtered_df) < len(df):
